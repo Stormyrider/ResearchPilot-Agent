@@ -28,6 +28,12 @@ load_dotenv()
 
 DB_PATH = "researchpilot.db"
 
+# ----- Context class moved to module level -----
+@dataclass
+class Context:
+    user_id: str
+
+# ----- Database functions -----
 def init_db():
     with sqlite3.connect(DB_PATH) as db:
         db.execute("""
@@ -65,10 +71,6 @@ def get_agent():
 
         short_term_memory = InMemorySaver()
         long_term_memory = InMemoryStore()
-
-        @dataclass
-        class Context:
-            user_id: str
 
         @tool
         def save_memory(
@@ -212,7 +214,7 @@ if __name__ == "__main__":
     print("ResearchPilot")
     print("Type 'exit' to quit.\n")
 
-    agent = get_agent()   # now we load it only when needed
+    agent = get_agent()
 
     while True:
         question = input("You: ")
