@@ -1,0 +1,12 @@
+langgraph
+langchain
+langchain-google-genai
+langchain-text-splitters
+langchain-chroma
+langchain-tavily
+python-dotenv
+pypdf
+streamlit
+fastapi
+uvicorn
+python-multipart
