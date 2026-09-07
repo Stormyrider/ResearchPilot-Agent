@@ -1,0 +1,2095 @@
+<!-- 
+  🌐 To view this website on localhost:
+  - Run: uvicorn server:app --reload --host 0.0.0.0 --port 8000
+  - Open browser at: http://localhost:8000
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ResearchPilot | AI Automation & Intelligent Business Systems</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+
+    <!-- React & Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js">
+    </script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js">
+    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js">
+    </script>
+
+    <style>
+        /* ─── Reset & Base ─── */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            color: #1a1a2e;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ─── Typography ─── */
+        .heading-xl {
+            font-size: clamp(2.4rem, 5vw, 4.2rem);
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+        }
+        .heading-lg {
+            font-size: clamp(2rem, 3.5vw, 3.2rem);
+            font-weight: 700;
+            line-height: 1.12;
+            letter-spacing: -0.02em;
+        }
+        .heading-md {
+            font-size: clamp(1.4rem, 2.2vw, 2rem);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+        .heading-sm {
+            font-size: clamp(1rem, 1.4vw, 1.25rem);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        .body-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #4a4a6a;
+        }
+        .body-text-sm {
+            font-size: 0.925rem;
+            line-height: 1.6;
+            color: #5a5a7a;
+        }
+        .label-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #2d7d6a;
+        }
+
+        /* ─── Container ─── */
+        .container-custom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        @media (min-width: 640px) {
+            .container-custom {
+                padding: 0 2.5rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .container-custom {
+                padding: 0 4rem;
+            }
+        }
+
+        /* ─── Buttons ─── */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.8rem;
+            background: #1a3a5c;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            box-shadow: 0 2px 12px rgba(26, 58, 92, 0.15);
+        }
+        .btn-primary:hover {
+            background: #0f2a44;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(26, 58, 92, 0.2);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.8rem;
+            background: transparent;
+            color: #1a3a5c;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            border: 1.5px solid #1a3a5c;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+        .btn-secondary:hover {
+            background: #f0f4f8;
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.8rem;
+            background: #2d7d6a;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            box-shadow: 0 2px 12px rgba(45, 125, 106, 0.15);
+        }
+        .btn-green:hover {
+            background: #1f6555;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(45, 125, 106, 0.25);
+        }
+
+        /* ─── Cards ─── */
+        .card-premium {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 1.75rem;
+            border: 1px solid #eef0f4;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+        .card-premium:hover {
+            border-color: #d0d8e4;
+            box-shadow: 0 8px 32px rgba(26, 58, 92, 0.06);
+            transform: translateY(-4px);
+        }
+
+        .card-premium-glow:hover {
+            border-color: #1a3a5c;
+            box-shadow: 0 8px 40px rgba(26, 58, 92, 0.08), 0 0 0 1px rgba(26, 58, 92, 0.04);
+        }
+
+        /* ─── Nav ─── */
+        .nav-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+        .nav-sticky.scrolled {
+            background: rgba(255, 255, 255, 0.97);
+            box-shadow: 0 1px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        /* ─── Announcement bar ─── */
+        .announcement-bar {
+            background: #1a3a5c;
+            color: #fff;
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1001;
+        }
+        .announcement-bar a {
+            color: #7fc9b8;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: color 0.2s;
+        }
+        .announcement-bar a:hover {
+            color: #a8dfd0;
+        }
+        .announcement-bar .dismiss {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.2rem 0.5rem;
+            transition: color 0.2s;
+        }
+        .announcement-bar .dismiss:hover {
+            color: #fff;
+        }
+
+        /* ─── Pipeline ─── */
+        .pipeline-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+        }
+        .pipeline-stage {
+            flex: 1;
+            min-width: 100px;
+            background: #f8f9fc;
+            border-radius: 12px;
+            padding: 0.75rem 0.5rem;
+            border: 1px solid #eef0f4;
+        }
+        .pipeline-stage .stage-title {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #6a6a8a;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .pipeline-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 0.4rem 0.6rem;
+            margin-bottom: 0.3rem;
+            border: 1px solid #eef0f4;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: #1a1a2e;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .pipeline-card .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .pipeline-card .dot.green {
+            background: #2d7d6a;
+        }
+        .pipeline-card .dot.blue {
+            background: #1a3a5c;
+        }
+        .pipeline-card .dot.amber {
+            background: #d4a843;
+        }
+        .pipeline-card .dot.gray {
+            background: #b0b8c8;
+        }
+
+        /* ─── KPI cards ─── */
+        .kpi-value {
+            font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+            font-weight: 700;
+            color: #1a3a5c;
+            letter-spacing: -0.02em;
+        }
+        .kpi-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6a6a8a;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* ─── Dashboard ─── */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.75rem;
+        }
+        .dashboard-kpi {
+            background: #f8f9fc;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #eef0f4;
+            text-align: center;
+        }
+
+        /* ─── Activity feed ─── */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.4rem 0;
+            font-size: 0.8rem;
+            color: #3a3a5a;
+            border-bottom: 1px solid #f0f2f6;
+        }
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        .activity-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: #2d7d6a;
+        }
+        .activity-dot.blue {
+            background: #1a3a5c;
+        }
+        .activity-dot.amber {
+            background: #d4a843;
+        }
+
+        /* ─── Tabs ─── */
+        .demo-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #eef0f4;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .demo-tab {
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #6a6a8a;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .demo-tab:hover {
+            background: #f0f4f8;
+            color: #1a3a5c;
+        }
+        .demo-tab.active {
+            background: #1a3a5c;
+            color: #fff;
+        }
+
+        /* ─── Chat bubbles ─── */
+        .chat-bubble-user {
+            background: #eef2f8;
+            color: #1a1a2e;
+            padding: 0.6rem 1rem;
+            border-radius: 12px 12px 4px 12px;
+            font-size: 0.9rem;
+            max-width: 80%;
+            align-self: flex-end;
+        }
+        .chat-bubble-ai {
+            background: #1a3a5c;
+            color: #fff;
+            padding: 0.6rem 1rem;
+            border-radius: 12px 12px 12px 4px;
+            font-size: 0.9rem;
+            max-width: 80%;
+            align-self: flex-start;
+        }
+
+        /* ─── FAQ accordion ─── */
+        .faq-item {
+            border-bottom: 1px solid #eef0f4;
+            padding: 0.75rem 0;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            text-align: left;
+            transition: color 0.2s;
+        }
+        .faq-question:hover {
+            color: #1a3a5c;
+        }
+        .faq-question .icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 1rem;
+        }
+        .faq-question .icon.open {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
+            opacity: 0;
+            padding: 0;
+            color: #4a4a6a;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .faq-answer.open {
+            max-height: 300px;
+            opacity: 1;
+            padding: 0.5rem 0 1rem;
+        }
+
+        /* ─── Testimonial carousel ─── */
+        .testimonial-slide {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        /* ─── Before/After slider ─── */
+        .ba-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            background: #f8f9fc;
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid #eef0f4;
+        }
+        @media (max-width: 768px) {
+            .ba-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+        }
+        .ba-col {
+            padding: 0.5rem;
+        }
+        .ba-col ul {
+            list-style: none;
+            padding: 0;
+        }
+        .ba-col ul li {
+            padding: 0.4rem 0;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #3a3a5a;
+        }
+        .ba-col ul li .badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+        }
+        .ba-col ul li .badge.red {
+            background: #fde8e8;
+            color: #b33a3a;
+        }
+        .ba-col ul li .badge.green {
+            background: #e4f4ef;
+            color: #1f6555;
+        }
+
+        /* ─── Client logo marquee ─── */
+        .logo-marquee {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+            animation: scroll 30s linear infinite;
+            width: max-content;
+        }
+        .logo-marquee:hover {
+            animation-play-state: paused;
+        }
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        .logo-placeholder {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #8a8aaa;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            padding: 0.25rem 1rem;
+            border: 1.5px dashed #d0d8e4;
+            border-radius: 8px;
+            background: #fafbfc;
+        }
+
+        /* ─── Full-width chatbot ─── */
+        .chatbot-full {
+            background: #f8f9fc;
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid #eef0f4;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .chatbot-full .messages {
+            max-height: 320px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            padding: 0.25rem 0;
+        }
+        .chatbot-full .messages::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chatbot-full .messages::-webkit-scrollbar-thumb {
+            background: #c8d0dc;
+            border-radius: 4px;
+        }
+
+        .chat-suggestion {
+            padding: 0.4rem 1rem;
+            background: #fff;
+            border: 1px solid #e0e6ee;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #1a3a5c;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        .chat-suggestion:hover {
+            background: #1a3a5c;
+            color: #fff;
+            border-color: #1a3a5c;
+        }
+
+        /* ─── Responsive tweaks ─── */
+        @media (max-width: 768px) {
+            .pipeline-container {
+                gap: 0.3rem;
+            }
+            .pipeline-stage {
+                min-width: 70px;
+                padding: 0.5rem 0.3rem;
+            }
+            .pipeline-card {
+                font-size: 0.55rem;
+                padding: 0.3rem 0.4rem;
+            }
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .chatbot-full {
+                padding: 1.25rem;
+            }
+            .announcement-bar {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.75rem;
+            }
+            .announcement-bar .dismiss {
+                right: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+            .demo-tabs {
+                gap: 0.3rem;
+            }
+            .demo-tab {
+                padding: 0.35rem 0.8rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* ─── Scroll reveal helpers ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── Misc ─── */
+        .gradient-text {
+            background: linear-gradient(135deg, #1a3a5c 0%, #2d7d6a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.4rem;
+        }
+        .status-dot.green {
+            background: #2d7d6a;
+        }
+        .status-dot.amber {
+            background: #d4a843;
+        }
+        .status-dot.blue {
+            background: #1a3a5c;
+        }
+
+        .typing-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #b0b8c8;
+            animation: typing 1.2s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
+            30% {
+                transform: translateY(-6px);
+                opacity: 1;
+            }
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f2f6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c8d0dc;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b0b8c8;
+        }
+
+        /* Selection */
+        ::selection {
+            background: #1a3a5c;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  DATA (unchanged)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const SERVICES = [{
+            id: 'support',
+            title: 'AI Customer Support',
+            desc: 'Intelligent assistants that handle customer questions and support workflows around the clock.'
+        }, {
+            id: 'sales',
+            title: 'AI Sales Automation',
+            desc: 'Lead qualification, follow-ups, appointment booking, and end-to-end sales workflow automation.'
+        }, {
+            id: 'calling',
+            title: 'AI Calling Agents',
+            desc: 'AI voice agents capable of handling inbound and outbound customer conversations naturally.'
+        }, {
+            id: 'whatsapp',
+            title: 'WhatsApp AI Automation',
+            desc: 'AI-powered customer communication and lead handling through WhatsApp Business.'
+        }, {
+            id: 'instagram',
+            title: 'Instagram AI Automation',
+            desc: 'Automated DM handling, lead capture, qualification, and engagement via Instagram.'
+        }, {
+            id: 'custom',
+            title: 'Custom AI Agents',
+            desc: 'Purpose-built agents designed around your specific business processes and workflows.'
+        }, {
+            id: 'knowledge',
+            title: 'AI Knowledge Systems',
+            desc: 'Internal knowledge assistants powered by company documents and private knowledge bases.'
+        }, {
+            id: 'workflow',
+            title: 'Workflow Automation',
+            desc: 'Connect AI systems with existing business tools and operational workflows seamlessly.'
+        }, ];
+
+        const FAQS = [{
+            q: 'What does ResearchPilot actually build?',
+            a: 'We build practical AI automation systems—customer support agents, sales qualification workflows, AI calling agents, WhatsApp and Instagram automation, internal knowledge assistants, and custom AI agents tailored to your business operations.'
+        }, {
+            q: 'What businesses can benefit from AI automation?',
+            a: 'Any business with repetitive customer interactions, lead management, support inquiries, or internal knowledge retrieval. We serve professional services, agencies, e-commerce, healthcare, real estate, financial services, and more.'
+        }, {
+            q: 'Can ResearchPilot integrate with our existing tools?',
+            a: 'Yes. We integrate with CRMs (Salesforce, HubSpot, Pipedrive), communication platforms (Slack, Teams), calendars, email, and custom APIs. Our architecture is built for seamless integration.'
+        }, {
+            q: 'Can AI agents communicate with customers naturally?',
+            a: 'Absolutely. Our AI agents use advanced language models to conduct natural, context-aware conversations via chat, voice, WhatsApp, Instagram, and web channels.'
+        }, {
+            q: 'Can you build custom AI agents?',
+            a: 'Yes. We design and build custom AI agents for specific business functions—sales qualification, customer onboarding, technical support, internal HR workflows, and more.'
+        }, {
+            q: 'How long does implementation take?',
+            a: 'Typically 2–6 weeks depending on complexity. We work in sprints with clear milestones and regular delivery checkpoints.'
+        }, {
+            q: 'Can AI agents hand conversations over to humans?',
+            a: 'Yes. We design smooth human handoff workflows so your team steps in only when needed, with full conversation context preserved.'
+        }, {
+            q: 'How do you measure AI performance?',
+            a: 'We track operational KPIs: response time, resolution rate, lead conversion, appointment booking rate, customer satisfaction, and automation hours saved.'
+        }, {
+            q: 'Do you provide ongoing optimization?',
+            a: 'Yes. We continuously monitor performance, fine-tune models, and optimize workflows to ensure your AI systems improve over time.'
+        }, {
+            q: 'How do we get started?',
+            a: 'Book a free AI Strategy Call. We\'ll identify where automation can create the greatest impact, and build a tailored roadmap for your business.'
+        }, ];
+
+        // Demo questions used in the chatbot suggestions
+        const DEMO_QUESTIONS = [
+            'What can ResearchPilot automate?',
+            'Can you build an AI calling agent?',
+            'How does implementation work?',
+            'Can you integrate with our CRM?',
+            'Can AI handle WhatsApp conversations?',
+            'How do I book a consultation?',
+        ];
+
+        // We no longer need the local CHATBOT_RESPONSES for the FAQChatbot,
+        // but we keep them for the other demos (WhatsApp, etc.) if desired.
+        // The full FAQChatbot now uses the /chat API.
+        // The other demo components (WhatsApp, Chatbot tab) still use the local responses.
+        // We keep the old data for those.
+        const CHATBOT_RESPONSES = {
+            'What can ResearchPilot automate?': 'We automate customer support, lead qualification, appointment booking, sales follow-ups, DM responses on Instagram and WhatsApp, internal knowledge retrieval, and custom business workflows.',
+            'Can you build an AI calling agent?': 'Yes. We build AI voice agents that handle inbound and outbound calls, qualify leads, schedule appointments, and provide customer support—all with natural conversation.',
+            'How does implementation work?': 'We follow a 4-step process: Discover (understand your business), Design (architect the solution), Deploy (build and integrate), and Optimize (monitor and improve).',
+            'Can you integrate with our CRM?': 'Absolutely. We integrate with Salesforce, HubSpot, Pipedrive, Microsoft Dynamics, and custom CRM systems via APIs and webhooks.',
+            'Can AI handle WhatsApp conversations?': 'Yes. Our WhatsApp AI agents handle customer inquiries, qualify leads, book appointments, and provide support—all within WhatsApp Business.',
+            'How do I book a consultation?': 'You can book a free AI Strategy Call right here on our website. Just click the "Book an AI Strategy Call" button anywhere on the site.',
+        };
+        const DEFAULT_CHAT_RESPONSE = 'Thanks for your question! Our team typically addresses this during our AI Strategy Call. Would you like to book one?';
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  HOOKS (unchanged)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        function useScrollReveal() {
+            useEffect(() => {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+                document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+                return () => observer.disconnect();
+            }, []);
+        }
+
+        function useCounter(target, duration = 2000, start = 0) {
+            const [value, setValue] = useState(start);
+            const ref = useRef(null);
+            const hasAnimated = useRef(false);
+
+            useEffect(() => {
+                const el = ref.current;
+                if (!el) return;
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !hasAnimated.current) {
+                            hasAnimated.current = true;
+                            const steps = 60;
+                            const increment = (target - start) / steps;
+                            let current = start;
+                            const interval = duration / steps;
+                            const timer = setInterval(() => {
+                                current += increment;
+                                if ((increment > 0 && current >= target) || (increment < 0 && current <=
+                                    target)) {
+                                    setValue(target);
+                                    clearInterval(timer);
+                                } else {
+                                    setValue(Math.round(current));
+                                }
+                            }, interval);
+                            return () => clearInterval(timer);
+                        }
+                    });
+                }, { threshold: 0.3 });
+                observer.observe(el);
+                return () => observer.disconnect();
+            }, [target, duration, start]);
+
+            return [value, ref];
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  COMPONENTS (unchanged except FAQChatbot)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        // ─── Announcement ───
+        function AnnouncementBar() {
+            const [dismissed, setDismissed] = useState(false);
+            if (dismissed) return null;
+            return (
+                <div className="announcement-bar">
+                    <span>ResearchPilot is now helping businesses automate customer operations with AI.</span>
+                    <a href="#cta">Book an AI Strategy Call <span className="ml-0.5">→</span></a>
+                    <button className="dismiss" onClick={() => setDismissed(true)} aria-label="Dismiss announcement">
+                        ✕
+                    </button>
+                </div>
+            );
+        }
+
+        // ─── Nav ───
+        function Navigation() {
+            const [scrolled, setScrolled] = useState(false);
+            const [mobileOpen, setMobileOpen] = useState(false);
+
+            useEffect(() => {
+                const handler = () => setScrolled(window.scrollY > 40);
+                window.addEventListener('scroll', handler);
+                return () => window.removeEventListener('scroll', handler);
+            }, []);
+
+            const links = ['Services', 'Solutions', 'How It Works', 'Why ResearchPilot', 'About', 'FAQ'];
+
+            return (
+                <nav className={`nav-sticky ${scrolled ? 'scrolled' : ''}`}>
+                    <div className="container-custom flex items-center justify-between h-16 md:h-20">
+                        <a href="#" className="flex items-center gap-2 text-xl font-extrabold tracking-tight text-[#1a3a5c] no-underline">
+                            <span className="text-2xl">◆</span>
+                            ResearchPilot
+                        </a>
+
+                        <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-[#4a4a6a]">
+                            {links.map(l => (
+                                <a key={l} href={`#${l.toLowerCase().replace(/\s/g, '-')}`}
+                                className="hover:text-[#1a3a5c] transition-colors no-underline">
+                                {l}
+                            </a>
+                        ))}
+                        <a href="#cta" className="btn-primary text-sm py-2 px-5 ml-2 no-underline">
+                            Book a Strategy Call
+                        </a>
+                    </div>
+
+                    <button
+                    className="lg:hidden text-[#1a3a5c] text-2xl p-1"
+                    onClick={() => setMobileOpen(!mobileOpen)}
+                    aria-label="Toggle menu"
+                    >
+                    {mobileOpen ? '✕' : '☰'}
+                </button>
+            </div>
+
+            {mobileOpen && (
+                <div className="lg:hidden bg-white border-t border-[#eef0f4] px-6 py-4 flex flex-col gap-3 text-sm font-medium text-[#4a4a6a]">
+                    {links.map(l => (
+                        <a key={l} href={`#${l.toLowerCase().replace(/\s/g, '-')}`}
+                        className="hover:text-[#1a3a5c] transition-colors no-underline py-1"
+                        onClick={() => setMobileOpen(false)}>
+                        {l}
+                    </a>
+                ))}
+                <a href="#cta" className="btn-primary text-center text-sm py-2.5 mt-1 no-underline"
+                onClick={() => setMobileOpen(false)}>
+                Book a Strategy Call
+            </a>
+        </div>
+    )}
+</nav>
+);
+}
+
+// ─── Hero ───
+function Hero() {
+const [leads, setLeads] = useState([{ id: 1, name: 'Acme Corp', stage: 0, time: 'Just now' }]);
+const stageNames = ['New Lead', 'Qualified', 'AI Contacted', 'Appointment', 'Sales Qualified', 'Converted'];
+
+useEffect(() => {
+const interval = setInterval(() => {
+setLeads(prev => {
+const updated = prev.map(l => {
+if (l.stage < 5 && Math.random() > 0.55) {
+return { ...l, stage: l.stage + 1, time: 'Just now' };
+}
+return l;
+});
+// Remove converted leads after a delay
+const filtered = updated.filter(l => !(l.stage === 5 && Math.random() > 0.92));
+// Add new lead occasionally
+if (Math.random() > 0.75 && filtered.length < 12) {
+const names = ['Nexus Tech', 'BrightPath', 'Apex Solutions', 'CoreLogic', 'Vantage Group', 'Strata Inc'];
+filtered.push({
+id: Date.now(),
+name: names[Math.floor(Math.random() * names.length)],
+stage: 0,
+time: 'Just now'
+});
+}
+return filtered;
+});
+}, 1800);
+return () => clearInterval(interval);
+}, []);
+
+const [counters, setCounters] = useState({ leads: 0, qualified: 0, appointments: 0, conversion: 0 });
+useEffect(() => {
+const interval = setInterval(() => {
+setCounters(prev => {
+const targetLeads = 1284;
+const targetQualified = 342;
+const targetAppointments = 87;
+const targetConversion = 26.7;
+const step = 8;
+return {
+leads: Math.min(prev.leads + step, targetLeads),
+qualified: Math.min(prev.qualified + Math.floor(step * 0.27), targetQualified),
+appointments: Math.min(prev.appointments + Math.floor(step * 0.07), targetAppointments),
+conversion: Math.min(prev.conversion + step * 0.02, targetConversion),
+};
+});
+}, 120);
+return () => clearInterval(interval);
+}, []);
+
+const getStageColor = (stage) => {
+const colors = ['#b0b8c8', '#d4a843', '#1a3a5c', '#2d7d6a', '#2d7d6a', '#1f6555'];
+return colors[stage] || '#b0b8c8';
+};
+
+return (
+<section className="pt-8 pb-12 md:pt-12 md:pb-20 bg-white" id="hero">
+<div className="container-custom">
+<div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
+{/* Text */}
+<div className="lg:col-span-2 space-y-5">
+<div className="label-text">AI Automation for Business</div>
+<h1 className="heading-xl text-[#1a1a2e] leading-[1.06]">
+AI Systems Built to <br />
+<span className="gradient-text">Move Your Business</span> Forward.
+</h1>
+<p className="body-text max-w-lg">
+ResearchPilot designs and deploys intelligent automation systems that turn
+repetitive operations, customer interactions, and business workflows into
+scalable AI-powered processes.
+</p>
+<div className="flex flex-wrap gap-3 pt-1">
+<a href="#cta" className="btn-primary no-underline">Book an AI Strategy Call</a>
+<a href="#services" className="btn-secondary no-underline">Explore Our Solutions</a>
+</div>
+</div>
+
+{/* Pipeline */}
+<div className="lg:col-span-3">
+<div className="bg-[#f8f9fc] rounded-2xl p-4 md:p-6 border border-[#eef0f4]">
+<div className="flex items-center justify-between mb-3">
+<span className="text-xs font-semibold text-[#6a6a8a] uppercase tracking-wider">Live AI Workflow Simulation</span>
+<span className="flex items-center gap-1.5 text-xs text-[#2d7d6a] font-medium">
+<span className="status-dot green"></span> Active
+</span>
+</div>
+
+<div className="pipeline-container">
+{stageNames.map((name, idx) => (
+<div key={idx} className="pipeline-stage">
+<div className="stage-title">{name}</div>
+{leads.filter(l => l.stage === idx).map(l => (
+<div key={l.id} className="pipeline-card" style={{ borderLeft: `3px solid ${getStageColor(idx)}` }}>
+<span className="dot" style={{ background: getStageColor(idx) }}></span>
+{l.name}
+<span className="text-[#8a8aaa] text-[0.5rem] ml-auto">{l.time}</span>
+</div>
+))}
+</div>
+))}
+</div>
+
+{/* KPI strip */}
+<div className="grid grid-cols-4 gap-2 mt-4 pt-3 border-t border-[#eef0f4]">
+<div className="text-center">
+<div className="kpi-value text-lg">{Math.round(counters.leads).toLocaleString()}</div>
+<div className="kpi-label text-[0.6rem]">Leads Processed</div>
+</div>
+<div className="text-center">
+<div className="kpi-value text-lg">{Math.round(counters.qualified).toLocaleString()}</div>
+<div className="kpi-label text-[0.6rem]">Qualified</div>
+</div>
+<div className="text-center">
+<div className="kpi-value text-lg">{Math.round(counters.appointments).toLocaleString()}</div>
+<div className="kpi-label text-[0.6rem]">Appointments</div>
+</div>
+<div className="text-center">
+<div className="kpi-value text-lg">{counters.conversion.toFixed(1)}%</div>
+<div className="kpi-label text-[0.6rem]">Conversion</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Trust ───
+function Trust() {
+const logos = ['AI Automation', '24/7 Intelligent Workflows', 'Business-Focused Implementation', 'Enterprise Security',
+'Scalable Architecture'
+];
+
+return (
+<section className="py-8 bg-white border-t border-[#f0f2f6]">
+<div className="container-custom">
+<p className="text-center text-sm font-medium text-[#6a6a8a] mb-4 tracking-wide">
+Built for businesses that value execution over hype.
+</p>
+<div className="flex flex-wrap justify-center items-center gap-6 md:gap-12">
+{logos.map((l, i) => (
+<span key={i} className="text-xs md:text-sm font-semibold text-[#4a4a6a] tracking-wide bg-[#f8f9fc] px-4 py-2 rounded-full border border-[#eef0f4]">
+{l}
+</span>
+))}
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Dashboard Preview ───
+function DashboardPreview() {
+const [kpis, setKpis] = useState({
+leads: 1247,
+conversations: 892,
+appointments: 76,
+conversion: 24.3,
+responseTime: 4.2,
+hoursSaved: 312
+});
+const [activity, setActivity] = useState([
+{ text: 'AI Sales Agent qualified a new lead', time: '2m ago', type: 'green' },
+{ text: 'WhatsApp Agent responded to customer', time: '5m ago', type: 'blue' },
+{ text: 'Instagram Agent captured inquiry', time: '12m ago', type: 'green' },
+{ text: 'AI Calling Agent completed call', time: '18m ago', type: 'amber' },
+{ text: 'Appointment successfully booked', time: '25m ago', type: 'green' },
+]);
+
+const activities = [
+{ text: 'AI Sales Agent qualified a new lead', type: 'green' },
+{ text: 'WhatsApp Agent responded to customer', type: 'blue' },
+{ text: 'Instagram Agent captured inquiry', type: 'green' },
+{ text: 'AI Calling Agent completed call', type: 'amber' },
+{ text: 'Appointment successfully booked', type: 'green' },
+{ text: 'Lead Qualification Agent processed 3 leads', type: 'blue' },
+{ text: 'AI Knowledge Assistant answered internal query', type: 'green' },
+{ text: 'WhatsApp Agent booked appointment', type: 'green' },
+];
+
+useEffect(() => {
+const interval = setInterval(() => {
+setKpis(prev => ({
+leads: prev.leads + Math.floor(Math.random() * 3),
+conversations: prev.conversations + Math.floor(Math.random() * 2),
+appointments: prev.appointments + (Math.random() > 0.7 ? 1 : 0),
+conversion: 24.3 + (Math.random() - 0.5) * 0.8,
+responseTime: 4.2 + (Math.random() - 0.5) * 0.6,
+hoursSaved: prev.hoursSaved + 0.1,
+}));
+setActivity(prev => {
+const newItem = activities[Math.floor(Math.random() * activities.length)];
+const times = ['Just now', '1m ago', '2m ago', '3m ago'];
+return [{
+...newItem,
+time: times[Math.floor(Math.random() * times.length)]
+}, ...prev.slice(0, 6)];
+});
+}, 3200);
+return () => clearInterval(interval);
+}, []);
+
+return (
+<section className="py-16 md:py-24 bg-[#fafbfc] border-t border-[#f0f2f6]" id="solutions">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-12 reveal">
+<span className="label-text">Dashboard</span>
+<h2 className="heading-lg mt-2">One place to see what your AI systems are doing.</h2>
+<p className="body-text mt-3">Monitor performance, track conversations, and measure impact—all in one unified view.</p>
+</div>
+
+<div className="bg-white rounded-2xl border border-[#eef0f4] p-4 md:p-6 shadow-sm reveal">
+{/* KPI grid */}
+<div className="dashboard-grid">
+<div className="dashboard-kpi">
+<div className="kpi-value text-lg">{kpis.leads.toLocaleString()}</div>
+<div className="kpi-label">Leads Generated</div>
+</div>
+<div className="dashboard-kpi">
+<div className="kpi-value text-lg">{kpis.conversations.toLocaleString()}</div>
+<div className="kpi-label">Conversations</div>
+</div>
+<div className="dashboard-kpi">
+<div className="kpi-value text-lg">{kpis.appointments}</div>
+<div className="kpi-label">Appointments</div>
+</div>
+<div className="dashboard-kpi">
+<div className="kpi-value text-lg">{kpis.conversion.toFixed(1)}%</div>
+<div className="kpi-label">Conversion</div>
+</div>
+<div className="dashboard-kpi">
+<div className="kpi-value text-lg">{kpis.responseTime.toFixed(1)}s</div>
+<div className="kpi-label">Avg. Response</div>
+</div>
+<div className="dashboard-kpi">
+<div className="kpi-value text-lg">{Math.round(kpis.hoursSaved)}h</div>
+<div className="kpi-label">Automation Hours Saved</div>
+</div>
+</div>
+
+{/* Graph + Activity */}
+<div className="grid md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-[#f0f2f6]">
+<div className="md:col-span-2">
+<div className="text-xs font-semibold text-[#6a6a8a] uppercase tracking-wider mb-2">Performance</div>
+<div className="h-40 flex items-end gap-2 pt-2">
+{[60, 75, 50, 85, 70, 95, 80, 65, 90, 78, 88, 72].map((h, i) => (
+<div key={i} className="flex-1 flex flex-col items-center gap-1">
+<div className="w-full rounded-t-sm transition-all duration-700"
+style={{ height: `${h * 0.45}%`, background: i % 3 === 0 ? '#2d7d6a' : '#1a3a5c', opacity: 0.7 + (h / 200) }}>
+</div>
+<div className="text-[0.4rem] text-[#8a8aaa] font-medium">{['7d','8d','9d','10d','11d','12d','13d','14d','15d','16d','17d','18d'][i]}</div>
+</div>
+))}
+</div>
+<div className="flex gap-4 mt-2 text-[0.6rem] font-medium text-[#6a6a8a]">
+<span><span className="inline-block w-2 h-2 rounded-sm bg-[#2d7d6a] mr-1"></span>Leads</span>
+<span><span className="inline-block w-2 h-2 rounded-sm bg-[#1a3a5c] mr-1"></span>Conversions</span>
+</div>
+</div>
+<div>
+<div className="text-xs font-semibold text-[#6a6a8a] uppercase tracking-wider mb-2">AI Activity</div>
+<div className="space-y-0.5">
+{activity.slice(0, 5).map((item, idx) => (
+<div key={idx} className="activity-item text-[0.7rem]">
+<span className={`activity-dot ${item.type}`}></span>
+<span className="flex-1">{item.text}</span>
+<span className="text-[0.55rem] text-[#8a8aaa]">{item.time}</span>
+</div>
+))}
+</div>
+</div>
+</div>
+
+{/* Status */}
+<div className="flex flex-wrap gap-4 mt-4 pt-3 border-t border-[#f0f2f6] text-[0.7rem] font-medium text-[#4a4a6a]">
+<span><span className="status-dot green"></span> AI Calling Agent — Active</span>
+<span><span className="status-dot green"></span> WhatsApp Agent — Active</span>
+<span><span className="status-dot green"></span> Instagram Agent — Active</span>
+<span><span className="status-dot green"></span> Lead Qualification — Active</span>
+</div>
+
+<div className="text-center text-[0.6rem] text-[#8a8aaa] mt-3 tracking-wide">Interactive Demo</div>
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Problem ───
+function Problem() {
+const problems = [
+{ title: 'Missed Leads', desc: 'Inquiries slip through the cracks when your team is busy.' },
+{ title: 'Slow Response Times', desc: 'Customers expect instant replies, not hours of waiting.' },
+{ title: 'Manual Follow-ups', desc: 'Your team spends too much time on repetitive outreach.' },
+{ title: 'Repetitive Support', desc: 'The same questions come in daily, wasting valuable time.' },
+{ title: 'Unqualified Calls', desc: 'Sales teams waste hours on leads that aren\'t a good fit.' },
+{ title: 'Scattered Conversations', desc: 'Customer interactions are spread across channels with no unified view.' },
+];
+
+return (
+<section className="py-16 md:py-24 bg-white" id="services">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-12 reveal">
+<span className="label-text">The Challenge</span>
+<h2 className="heading-lg mt-2">Your team shouldn't spend hours doing work AI can handle.</h2>
+</div>
+<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+{problems.map((p, i) => (
+<div key={i} className="card-premium card-premium-glow reveal" style={{ transitionDelay: `${i * 0.05}s` }}>
+<div className="text-2xl mb-1.5 opacity-70">◈</div>
+<h3 className="heading-sm text-[#1a1a2e]">{p.title}</h3>
+<p className="body-text-sm mt-1">{p.desc}</p>
+</div>
+))}
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Services ───
+function Services() {
+const [hovered, setHovered] = useState(null);
+
+return (
+<section className="py-16 md:py-24 bg-[#fafbfc] border-t border-[#f0f2f6]" id="solutions">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-12 reveal">
+<span className="label-text">Our Services</span>
+<h2 className="heading-lg mt-2">AI systems designed around your business.</h2>
+</div>
+<div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+{SERVICES.map((s, i) => (
+<div
+key={s.id}
+className={`card-premium cursor-pointer transition-all duration-300 reveal ${hovered === i ? 'border-[#1a3a5c] shadow-[0_8px_40px_rgba(26,58,92,0.08)] -translate-y-1' : ''}`}
+onMouseEnter={() => setHovered(i)}
+onMouseLeave={() => setHovered(null)}
+style={{ transitionDelay: `${i * 0.04}s` }}
+>
+<div className={`text-2xl mb-1.5 transition-transform duration-300 ${hovered === i ? 'scale-110 text-[#1a3a5c]' : 'opacity-70'}`}>
+◈
+</div>
+<h3 className="heading-sm text-[#1a1a2e]">{s.title}</h3>
+<p className="body-text-sm mt-1">{s.desc}</p>
+<div className={`mt-3 text-sm font-medium transition-all duration-300 ${hovered === i ? 'text-[#1a3a5c] translate-x-1' : 'text-[#8a8aaa]'}`}>
+Learn more →
+</div>
+</div>
+))}
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Live Demos (unchanged, still uses local responses) ───
+function LiveDemos() {
+const [activeTab, setActiveTab] = useState('whatsapp');
+const [chatMessages, setChatMessages] = useState([
+{ sender: 'ai', text: 'Hi there! 👋 I\'m ResearchPilot\'s AI assistant. How can I help you today?' }
+]);
+const [isTyping, setIsTyping] = useState(false);
+const [callActive, setCallActive] = useState(false);
+const [callDuration, setCallDuration] = useState(0);
+const [instaMessages, setInstaMessages] = useState([
+{ sender: 'customer', text: 'Do you offer consultations for AI automation?' }
+]);
+const [instaReply, setInstaReply] = useState('');
+
+const tabs = [
+{ id: 'whatsapp', label: 'WhatsApp AI' },
+{ id: 'calling', label: 'AI Calling' },
+{ id: 'instagram', label: 'Instagram AI' },
+{ id: 'chatbot', label: 'Website Chatbot' },
+];
+
+const handleChatSend = (q) => {
+const userMsg = { sender: 'user', text: q };
+setChatMessages(prev => [...prev, userMsg]);
+setIsTyping(true);
+setTimeout(() => {
+const response = CHATBOT_RESPONSES[q] || DEFAULT_CHAT_RESPONSE;
+setChatMessages(prev => [...prev, { sender: 'ai', text: response }]);
+setIsTyping(false);
+}, 800 + Math.random() * 600);
+};
+
+useEffect(() => {
+let timer;
+if (callActive) {
+timer = setInterval(() => setCallDuration(d => d + 1), 1000);
+} else {
+setCallDuration(0);
+}
+return () => clearInterval(timer);
+}, [callActive]);
+
+useEffect(() => {
+// Auto-reply to Instagram
+if (instaMessages.length === 1) {
+setTimeout(() => {
+setInstaReply('Thanks for reaching out! Yes, we offer AI strategy consultations. Would you like to book one?');
+}, 1200);
+}
+}, []);
+
+const renderDemo = () => {
+switch (activeTab) {
+case 'whatsapp':
+return (
+<div className="bg-[#f8f9fc] rounded-xl p-4 border border-[#eef0f4] max-w-md mx-auto">
+<div className="bg-[#e4f0eb] rounded-t-xl px-4 py-2 flex items-center gap-2 text-sm font-semibold text-[#1a3a5c]">
+<span className="text-xl">💬</span> WhatsApp Business
+</div>
+<div className="bg-white rounded-b-xl p-4 space-y-2 min-h-[200px] max-h-[260px] overflow-y-auto">
+{chatMessages.map((m, i) => (
+<div key={i} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+<div className={m.sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}>
+{m.text}
+</div>
+</div>
+))}
+{isTyping && (
+<div className="flex justify-start">
+<div className="bg-[#1a3a5c] text-white px-4 py-2 rounded-xl rounded-bl-none flex gap-1">
+<span className="typing-dot"></span>
+<span className="typing-dot"></span>
+<span className="typing-dot"></span>
+</div>
+</div>
+)}
+</div>
+<div className="flex flex-wrap gap-1.5 mt-2">
+{DEMO_QUESTIONS.slice(0, 4).map(q => (
+<button key={q} className="chat-suggestion text-[0.7rem] px-3 py-1" onClick={() => handleChatSend(q)}>
+{q}
+</button>
+))}
+</div>
+</div>
+);
+
+case 'calling':
+return (
+<div className="bg-[#f8f9fc] rounded-xl p-4 border border-[#eef0f4] max-w-md mx-auto">
+<div className="flex items-center justify-between mb-3">
+<div>
+<div className="font-semibold text-[#1a3a5c]">AI Calling Agent</div>
+<div className="text-xs text-[#6a6a8a]">Sales Qualification Agent</div>
+</div>
+<span className={`text-xs font-medium px-3 py-1 rounded-full ${callActive ? 'bg-[#e4f4ef] text-[#1f6555]' : 'bg-[#f0f2f6] text-[#6a6a8a]'}`}>
+{callActive ? '● Call in progress' : '● Ready'}
+</span>
+</div>
+<div className="bg-white rounded-lg p-4 border border-[#eef0f4] space-y-2">
+<div className="flex justify-between text-sm">
+<span className="text-[#6a6a8a]">Duration</span>
+<span className="font-mono font-semibold">{String(Math.floor(callDuration / 60)).padStart(2, '0')}:{String(callDuration % 60).padStart(2, '0')}</span>
+</div>
+<div className="flex justify-between text-sm">
+<span className="text-[#6a6a8a]">Customer Intent</span>
+<span className="font-medium text-[#1a3a5c]">High</span>
+</div>
+<div className="flex justify-between text-sm">
+<span className="text-[#6a6a8a]">Sentiment</span>
+<span className="font-medium text-[#2d7d6a]">Positive</span>
+</div>
+<div className="flex justify-between text-sm">
+<span className="text-[#6a6a8a]">Qualification</span>
+<span className="font-medium text-[#2d7d6a]">Qualified ✓</span>
+</div>
+<div className="flex justify-between text-sm">
+<span className="text-[#6a6a8a]">Next Action</span>
+<span className="font-medium text-[#1a3a5c]">Schedule Demo</span>
+</div>
+{/* Waveform */}
+<div className="flex items-end gap-0.5 h-8 mt-1">
+{[12, 25, 18, 30, 22, 35, 28, 20, 32, 26, 18, 24, 30, 22, 16, 28].map((h, i) => (
+<div key={i} className="w-1.5 bg-[#1a3a5c] rounded-sm transition-all duration-300"
+style={{ height: `${callActive ? h * 0.8 + 4 : 4}px`, opacity: callActive ? 0.6 : 0.2 }}>
+</div>
+))}
+</div>
+</div>
+<button
+className={`mt-3 w-full py-2.5 rounded-lg font-semibold text-sm transition-all ${callActive ? 'bg-[#fde8e8] text-[#b33a3a] hover:bg-[#fcd5d5]' : 'bg-[#1a3a5c] text-white hover:bg-[#0f2a44]'}`}
+onClick={() => setCallActive(!callActive)}
+>
+{callActive ? '⏹ End Call' : '▶ Start Demo Call'}
+</button>
+</div>
+);
+
+case 'instagram':
+return (
+<div className="bg-[#f8f9fc] rounded-xl p-4 border border-[#eef0f4] max-w-md mx-auto">
+<div className="bg-[#e4eaf2] rounded-t-xl px-4 py-2 flex items-center gap-2 text-sm font-semibold text-[#1a3a5c]">
+<span className="text-xl">📱</span> Instagram DM
+</div>
+<div className="bg-white rounded-b-xl p-4 space-y-2 min-h-[180px] max-h-[220px] overflow-y-auto">
+{instaMessages.map((m, i) => (
+<div key={i} className={`flex ${m.sender === 'customer' ? 'justify-end' : 'justify-start'}`}>
+<div className={m.sender === 'customer' ? 'chat-bubble-user' : 'chat-bubble-ai'}>
+{m.text}
+</div>
+</div>
+))}
+{instaReply && (
+<div className="flex justify-start">
+<div className="chat-bubble-ai">{instaReply}</div>
+</div>
+)}
+</div>
+<div className="flex flex-wrap gap-1.5 mt-2">
+{['What services do you offer?', 'Can I book a consultation?', 'How does pricing work?', 'Do you integrate with CRM?'].map(q => (
+<button key={q} className="chat-suggestion text-[0.7rem] px-3 py-1"
+onClick={() => {
+setInstaMessages(prev => [...prev, { sender: 'customer', text: q }]);
+setInstaReply('');
+setTimeout(() => {
+const responses = [
+'We offer AI automation for sales, support, and operations. Let me know what you\'re looking for!',
+'Yes! You can book a free AI Strategy Call right now.',
+'Pricing is tailored to your business needs. Our team will provide a custom quote.',
+'Absolutely. We integrate with Salesforce, HubSpot, Pipedrive, and more.'
+];
+setInstaReply(responses[Math.floor(Math.random() * responses.length)]);
+}, 700 + Math.random() * 500);
+}}>
+{q}
+</button>
+))}
+</div>
+</div>
+);
+
+case 'chatbot':
+return (
+<div className="bg-[#f8f9fc] rounded-xl p-4 border border-[#eef0f4] max-w-md mx-auto">
+<div className="bg-[#1a3a5c] rounded-t-xl px-4 py-2 flex items-center justify-between text-white text-sm font-semibold">
+<span>💬 ResearchPilot AI</span>
+<span className="text-[0.6rem] font-normal opacity-70">● Online</span>
+</div>
+<div className="bg-white rounded-b-xl p-4 space-y-2 min-h-[200px] max-h-[260px] overflow-y-auto">
+{[...chatMessages.slice(0, 4), ...(chatMessages.length > 4 ? chatMessages.slice(-2) : [])].map((m, i) => (
+<div key={i} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+<div className={m.sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}>
+{m.text}
+</div>
+</div>
+))}
+{isTyping && (
+<div className="flex justify-start">
+<div className="bg-[#1a3a5c] text-white px-4 py-2 rounded-xl rounded-bl-none flex gap-1">
+<span className="typing-dot"></span>
+<span className="typing-dot"></span>
+<span className="typing-dot"></span>
+</div>
+</div>
+)}
+</div>
+<div className="flex flex-wrap gap-1.5 mt-2">
+{DEMO_QUESTIONS.slice(0, 4).map(q => (
+<button key={q} className="chat-suggestion text-[0.7rem] px-3 py-1" onClick={() => handleChatSend(q)}>
+{q}
+</button>
+))}
+</div>
+<div className="mt-2 text-center">
+<a href="#faq-chatbot" className="text-xs font-medium text-[#1a3a5c] hover:underline">Open full AI Assistant →</a>
+</div>
+</div>
+);
+
+default:
+return null;
+}
+};
+
+return (
+<section className="py-16 md:py-24 bg-white border-t border-[#f0f2f6]" id="how-it-works">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-10 reveal">
+<span className="label-text">Live Demos</span>
+<h2 className="heading-lg mt-2">See ResearchPilot in Action.</h2>
+</div>
+
+<div className="demo-tabs justify-center">
+{tabs.map(t => (
+<button key={t.id} className={`demo-tab ${activeTab === t.id ? 'active' : ''}`} onClick={() => setActiveTab(t.id)}>
+{t.label}
+</button>
+))}
+</div>
+
+<div className="reveal">
+{renderDemo()}
+</div>
+</div>
+</section>
+);
+}
+
+// ─── How It Works ───
+function HowItWorks() {
+const steps = [
+{ num: '01', title: 'Discover', desc: 'We understand your business, customers, and operational bottlenecks.' },
+{ num: '02', title: 'Design', desc: 'We design the AI architecture and workflow around your requirements.' },
+{ num: '03', title: 'Deploy', desc: 'We build, integrate, test, and deploy your AI systems.' },
+{ num: '04', title: 'Optimize', desc: 'We monitor performance and continuously improve the system.' },
+];
+
+return (
+<section className="py-16 md:py-24 bg-[#fafbfc] border-t border-[#f0f2f6]" id="how-it-works">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-12 reveal">
+<span className="label-text">Process</span>
+<h2 className="heading-lg mt-2">How we build your AI systems.</h2>
+</div>
+<div className="grid md:grid-cols-4 gap-4 md:gap-6">
+{steps.map((s, i) => (
+<div key={i} className="text-center reveal" style={{ transitionDelay: `${i * 0.08}s` }}>
+<div className="text-4xl font-extrabold text-[#1a3a5c] opacity-20 mb-1">{s.num}</div>
+<div className="w-12 h-12 mx-auto rounded-full bg-[#1a3a5c] text-white flex items-center justify-center text-sm font-bold mb-3">
+{i + 1}
+</div>
+<h3 className="heading-sm">{s.title}</h3>
+<p className="body-text-sm mt-1 max-w-xs mx-auto">{s.desc}</p>
+{i < 3 && (
+<div className="hidden md:block text-2xl text-[#d0d8e4] mt-2">→</div>
+)}
+</div>
+))}
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Before / After ───
+function BeforeAfter() {
+const before = ['Manual lead response', 'Missed inquiries', 'Slow follow-ups', 'Repetitive support',
+'No centralized visibility', 'Staff overloaded'
+];
+const after = ['Instant AI response', 'Automated qualification', 'Automated follow-ups', '24/7 customer handling',
+'Centralized analytics', 'Scalable operations'
+];
+
+return (
+<section className="py-16 md:py-24 bg-white border-t border-[#f0f2f6]">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-10 reveal">
+<span className="label-text">Transformation</span>
+<h2 className="heading-lg mt-2">From manual operations to intelligent workflows.</h2>
+</div>
+<div className="ba-container reveal">
+<div className="ba-col">
+<h4 className="text-lg font-bold text-[#b33a3a] mb-3 flex items-center gap-2">✕ Before</h4>
+<ul>
+{before.map((item, i) => (
+<li key={i}><span className="badge red">✕</span> {item}</li>
+))}
+</ul>
+</div>
+<div className="ba-col">
+<h4 className="text-lg font-bold text-[#1f6555] mb-3 flex items-center gap-2">✓ After</h4>
+<ul>
+{after.map((item, i) => (
+<li key={i}><span className="badge green">✓</span> {item}</li>
+))}
+</ul>
+</div>
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Why ResearchPilot ───
+function WhyResearchPilot() {
+const diffs = [
+{ title: 'Business First', desc: 'Technology is selected according to the business problem, not the other way around.' },
+{ title: 'Custom Architecture', desc: 'No generic one-size-fits-all automation packages. Every system is purpose-built.' },
+{ title: 'End-to-End Implementation', desc: 'Strategy, development, integration, deployment, and optimization—all in one.' },
+{ title: 'Measurable Outcomes', desc: 'Systems are designed around operational and business KPIs that matter.' },
+{ title: 'Human + AI', desc: 'AI handles repetitive work while humans remain in control of important decisions.' },
+{ title: 'Built to Scale', desc: 'Architecture designed to grow with your organization, not hold it back.' },
+];
+
+return (
+<section className="py-16 md:py-24 bg-[#fafbfc] border-t border-[#f0f2f6]" id="why-researchpilot">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-12 reveal">
+<span className="label-text">Why Us</span>
+<h2 className="heading-lg mt-2">We don't sell AI. We build systems that solve business problems.</h2>
+</div>
+<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+{diffs.map((d, i) => (
+<div key={i} className="card-premium reveal" style={{ transitionDelay: `${i * 0.05}s` }}>
+<div className="text-2xl mb-1.5 opacity-40">◈</div>
+<h3 className="heading-sm text-[#1a1a2e]">{d.title}</h3>
+<p className="body-text-sm mt-1">{d.desc}</p>
+</div>
+))}
+</div>
+</div>
+</section>
+);
+}
+
+// ─── About ───
+function About() {
+return (
+<section className="py-16 md:py-24 bg-white border-t border-[#f0f2f6]" id="about">
+<div className="container-custom">
+<div className="grid lg:grid-cols-5 gap-10 items-start">
+<div className="lg:col-span-2 reveal">
+<span className="label-text">About</span>
+<h2 className="heading-lg mt-2">Making advanced AI practical, reliable, and useful for real businesses.</h2>
+</div>
+<div className="lg:col-span-3 space-y-4 reveal">
+<p className="body-text">
+ResearchPilot is an AI automation agency focused on building practical AI systems
+for businesses. We help organizations turn repetitive operations, customer interactions,
+and business workflows into scalable AI-powered processes.
+</p>
+<p className="body-text">
+Our team combines deep expertise in AI engineering, business process design, and
+enterprise integration to deliver systems that actually work—not just demos that
+look impressive.
+</p>
+<div className="grid grid-cols-2 gap-3 pt-2">
+<div className="bg-[#f8f9fc] rounded-xl p-3 border border-[#eef0f4]">
+<div className="text-xl font-bold text-[#1a3a5c]">100+</div>
+<div className="text-xs text-[#6a6a8a]">AI systems deployed</div>
+</div>
+<div className="bg-[#f8f9fc] rounded-xl p-3 border border-[#eef0f4]">
+<div className="text-xl font-bold text-[#2d7d6a]">99.7%</div>
+<div className="text-xs text-[#6a6a8a]">System uptime</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Principles ───
+function Principles() {
+const principles = [
+'Build with purpose',
+'Measure what matters',
+'Keep humans in control',
+'Engineer for reliability',
+'Design for scale',
+];
+
+return (
+<section className="py-10 md:py-14 bg-[#fafbfc] border-t border-[#f0f2f6]">
+<div className="container-custom">
+<div className="flex flex-wrap justify-center gap-3 md:gap-6">
+{principles.map((p, i) => (
+<span key={i} className="text-xs md:text-sm font-semibold text-[#4a4a6a] bg-white px-4 py-2 rounded-full border border-[#eef0f4] shadow-sm">
+{p}
+</span>
+))}
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Client Logos ───
+function ClientLogos() {
+const logos = ['Acme Corp', 'Nexus Tech', 'BrightPath', 'Apex Solutions', 'CoreLogic', 'Vantage Group', 'Strata Inc',
+'Quantum Partners'
+];
+const doubled = [...logos, ...logos];
+
+return (
+<section className="py-10 md:py-14 bg-white border-t border-[#f0f2f6] overflow-hidden">
+<div className="container-custom">
+<p className="text-center text-xs font-medium text-[#6a6a8a] uppercase tracking-wider mb-4">Trusted by forward-thinking teams</p>
+<div className="relative overflow-hidden">
+<div className="logo-marquee">
+{doubled.map((name, i) => (
+<span key={i} className="logo-placeholder">{name}</span>
+))}
+</div>
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Testimonials ───
+function Testimonials() {
+const [active, setActive] = useState(0);
+const testimonials = [
+{ name: 'Sarah Chen', role: 'VP of Operations', company: 'Nexus Tech', quote: 'ResearchPilot transformed our lead response time from hours to seconds. Our sales team is now focused on closing deals, not chasing leads.' },
+{ name: 'Michael Torres', role: 'CEO', company: 'BrightPath', quote: 'The AI calling agent alone saved us 40+ hours per week. We\'re now qualifying more leads with less effort.' },
+{ name: 'Amara Singh', role: 'Head of Customer Experience', company: 'CoreLogic', quote: 'Our customer satisfaction scores jumped 28% after deploying ResearchPilot\'s AI support system. It\'s been a game-changer.' },
+];
+
+useEffect(() => {
+const timer = setInterval(() => setActive(i => (i + 1) % testimonials.length), 5000);
+return () => clearInterval(timer);
+}, [testimonials.length]);
+
+return (
+<section className="py-16 md:py-24 bg-[#fafbfc] border-t border-[#f0f2f6]">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-10 reveal">
+<span className="label-text">Testimonials</span>
+<h2 className="heading-lg mt-2">What our clients say.</h2>
+</div>
+<div className="max-w-3xl mx-auto">
+<div className="bg-white rounded-2xl p-6 md:p-10 border border-[#eef0f4] shadow-sm reveal">
+<div className="text-5xl text-[#1a3a5c] opacity-20 mb-2">"</div>
+<p className="body-text text-lg md:text-xl leading-relaxed">{testimonials[active].quote}</p>
+<div className="mt-5 pt-4 border-t border-[#f0f2f6] flex items-center justify-between">
+<div>
+<div className="font-semibold text-[#1a1a2e]">{testimonials[active].name}</div>
+<div className="text-sm text-[#6a6a8a]">{testimonials[active].role}, {testimonials[active].company}</div>
+</div>
+<div className="flex gap-1">
+{testimonials.map((_, i) => (
+<button key={i} className={`w-2.5 h-2.5 rounded-full transition-all ${i === active ? 'bg-[#1a3a5c] w-6' : 'bg-[#d0d8e4]'}`}
+onClick={() => setActive(i)} aria-label={`Testimonial ${i + 1}`} />
+))}
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Case Study ───
+function CaseStudy() {
+return (
+<section className="py-16 md:py-24 bg-white border-t border-[#f0f2f6]">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-10 reveal">
+<span className="label-text">Results</span>
+<h2 className="heading-lg mt-2">From challenge to outcome.</h2>
+</div>
+<div className="grid md:grid-cols-2 gap-6">
+<div className="bg-[#f8f9fc] rounded-2xl p-6 border border-[#eef0f4] reveal">
+<div className="text-xs font-semibold text-[#6a6a8a] uppercase tracking-wider mb-1">Lead Response</div>
+<h4 className="text-lg font-bold text-[#1a1a2e] mb-2">Challenge → Solution → Outcome</h4>
+<p className="body-text-sm">Manual lead response times of 45+ minutes. Deployed AI sales agent. Now 2-second average response, 3x more qualified leads.</p>
+<div className="mt-3 flex gap-4 text-sm font-medium">
+<span className="text-[#2d7d6a]">✓ 45min → 2sec</span>
+<span className="text-[#1a3a5c]">✓ 3x qualified leads</span>
+</div>
+</div>
+<div className="bg-[#f8f9fc] rounded-2xl p-6 border border-[#eef0f4] reveal">
+<div className="text-xs font-semibold text-[#6a6a8a] uppercase tracking-wider mb-1">Customer Support</div>
+<h4 className="text-lg font-bold text-[#1a1a2e] mb-2">Challenge → Solution → Outcome</h4>
+<p className="body-text-sm">Support team overwhelmed with repetitive questions. Deployed AI knowledge assistant. 78% of inquiries resolved without human intervention.</p>
+<div className="mt-3 flex gap-4 text-sm font-medium">
+<span className="text-[#2d7d6a]">✓ 78% self-service</span>
+<span className="text-[#1a3a5c]">✓ 40% faster resolution</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+);
+}
+
+// ─── FAQ (accordion) ───
+function FAQ() {
+const [open, setOpen] = useState(null);
+
+return (
+<section className="py-16 md:py-24 bg-[#fafbfc] border-t border-[#f0f2f6]" id="faq">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-10 reveal">
+<span className="label-text">FAQ</span>
+<h2 className="heading-lg mt-2">Answers to common questions.</h2>
+</div>
+<div className="max-w-3xl mx-auto bg-white rounded-2xl border border-[#eef0f4] p-4 md:p-6 reveal">
+{FAQS.map((item, i) => (
+<div key={i} className="faq-item">
+<button className="faq-question" onClick={() => setOpen(open === i ? null : i)}>
+<span>{item.q}</span>
+<span className={`icon ${open === i ? 'open' : ''}`}>▾</span>
+</button>
+<div className={`faq-answer ${open === i ? 'open' : ''}`}>{item.a}</div>
+</div>
+))}
+</div>
+</div>
+</section>
+);
+}
+
+// ─── FULL-WIDTH FAQ CHATBOT (CONNECTED TO BACKEND) ───
+function FAQChatbot() {
+const [messages, setMessages] = useState([
+{ sender: 'ai', text: 'Hi there! 👋 I\'m ResearchPilot\'s AI assistant. Ask me anything about our services.' }
+]);
+const [input, setInput] = useState('');
+const [isTyping, setIsTyping] = useState(false);
+const [loading, setLoading] = useState(false);
+const messagesEndRef = useRef(null);
+
+const sendMessage = async (text) => {
+if (!text.trim() || loading) return;
+
+const userMsg = { sender: 'user', text: text.trim() };
+setMessages(prev => [...prev, userMsg]);
+setInput('');
+setLoading(true);
+setIsTyping(true);
+
+try {
+const response = await fetch('/chat', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ question: text.trim() })
+});
+
+if (!response.ok) {
+throw new Error(`Server error: ${response.status}`);
+}
+
+const data = await response.json();
+const reply = data.answer || 'Sorry, I did not get a proper response.';
+
+setMessages(prev => [...prev, { sender: 'ai', text: reply }]);
+} catch (error) {
+console.error('Chat error:', error);
+setMessages(prev => [...prev, { sender: 'ai', text: '⚠️ Error: Could not reach the AI agent. Please try again later.' }]);
+} finally {
+setIsTyping(false);
+setLoading(false);
+}
+};
+
+useEffect(() => {
+messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+}, [messages]);
+
+return (
+<section className="py-16 md:py-24 bg-white border-t border-[#f0f2f6]" id="faq-chatbot">
+<div className="container-custom">
+<div className="text-center max-w-2xl mx-auto mb-8 reveal">
+<span className="label-text">AI Assistant</span>
+<h2 className="heading-lg mt-2">Still have questions? Ask ResearchPilot.</h2>
+<p className="body-text mt-2">Get instant answers about our AI systems, implementation process, integrations, and services.</p>
+</div>
+<div className="chatbot-full reveal">
+<div className="messages">
+{messages.map((m, i) => (
+<div key={i} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+<div className={m.sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}>
+{m.text}
+</div>
+</div>
+))}
+{isTyping && (
+<div className="flex justify-start">
+<div className="bg-[#1a3a5c] text-white px-4 py-2 rounded-xl rounded-bl-none flex gap-1">
+<span className="typing-dot"></span>
+<span className="typing-dot"></span>
+<span className="typing-dot"></span>
+</div>
+</div>
+)}
+<div ref={messagesEndRef} />
+</div>
+<div className="flex flex-wrap gap-1.5 mt-3">
+{DEMO_QUESTIONS.map(q => (
+<button key={q} className="chat-suggestion text-[0.75rem]" onClick={() => sendMessage(q)}>
+{q}
+</button>
+))}
+</div>
+<div className="flex gap-2 mt-3">
+<input
+type="text"
+className="flex-1 px-4 py-2.5 rounded-xl border border-[#e0e6ee] text-sm focus:outline-none focus:ring-2 focus:ring-[#1a3a5c] focus:border-transparent"
+placeholder="Ask a question..."
+value={input}
+onChange={e => setInput(e.target.value)}
+onKeyDown={e => e.key === 'Enter' && sendMessage(input)}
+disabled={loading}
+/>
+<button className="btn-primary text-sm py-2.5 px-5" onClick={() => sendMessage(input)} disabled={loading}>
+{loading ? 'Sending...' : 'Send'}
+</button>
+</div>
+<div className="mt-3 text-center">
+<a href="#cta" className="text-sm font-semibold text-[#1a3a5c] hover:underline">Or book a Strategy Call →</a>
+</div>
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Final CTA ───
+function FinalCTA() {
+return (
+<section className="py-16 md:py-24 bg-[#1a3a5c] text-white" id="cta">
+<div className="container-custom text-center">
+<div className="max-w-2xl mx-auto reveal">
+<span className="text-sm font-semibold text-[#7fc9b8] uppercase tracking-wider">Get Started</span>
+<h2 className="heading-lg mt-2">Ready to turn AI into an operating advantage?</h2>
+<p className="text-[#c8d8e8] text-lg mt-3 max-w-lg mx-auto">
+Let's identify where intelligent automation can create the greatest impact across your business.
+</p>
+<div className="flex flex-wrap justify-center gap-4 mt-6">
+<a href="#cta" className="btn-green text-base px-8 py-3 no-underline">
+Book an AI Strategy Call
+</a>
+<a href="#services" className="bg-white/10 text-white border border-white/30 hover:bg-white/20 px-7 py-3 rounded-lg font-semibold no-underline transition-all">
+Explore Our Services
+</a>
+</div>
+</div>
+</div>
+</section>
+);
+}
+
+// ─── Footer ───
+function Footer() {
+return (
+<footer className="bg-[#0f1a2e] text-[#a8b8d0] border-t border-[#1a2a44] pt-12 pb-6">
+<div className="container-custom">
+<div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-8 border-b border-[#1a2a44]">
+<div>
+<div className="flex items-center gap-2 text-xl font-extrabold text-white mb-2">
+<span className="text-2xl">◆</span> ResearchPilot
+</div>
+<p className="text-sm text-[#7a8aaa] max-w-xs">AI automation and intelligent business systems for serious enterprises.</p>
+</div>
+<div>
+<h4 className="text-sm font-semibold text-white mb-3">Company</h4>
+<ul className="space-y-1.5 text-sm">
+<li><a href="#about" className="hover:text-white transition-colors no-underline">About</a></li>
+<li><a href="#why-researchpilot" className="hover:text-white transition-colors no-underline">Why Us</a></li>
+<li><a href="#cta" className="hover:text-white transition-colors no-underline">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 className="text-sm font-semibold text-white mb-3">Solutions</h4>
+<ul className="space-y-1.5 text-sm">
+<li><a href="#solutions" className="hover:text-white transition-colors no-underline">AI Agents</a></li>
+<li><a href="#solutions" className="hover:text-white transition-colors no-underline">AI Calling</a></li>
+<li><a href="#solutions" className="hover:text-white transition-colors no-underline">WhatsApp Automation</a></li>
+<li><a href="#solutions" className="hover:text-white transition-colors no-underline">Instagram Automation</a></li>
+<li><a href="#solutions" className="hover:text-white transition-colors no-underline">AI Chatbots</a></li>
+</ul>
+</div>
+<div>
+<h4 className="text-sm font-semibold text-white mb-3">Resources</h4>
+<ul className="space-y-1.5 text-sm">
+<li><a href="#faq" className="hover:text-white transition-colors no-underline">FAQ</a></li>
+<li><a href="#case-studies" className="hover:text-white transition-colors no-underline">Case Studies</a></li>
+<li><a href="#faq-chatbot" className="hover:text-white transition-colors no-underline">AI Assistant</a></li>
+</ul>
+</div>
+</div>
+<div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-5 text-xs text-[#5a7a9a]">
+<span>© 2026 ResearchPilot. All rights reserved.</span>
+<div className="flex gap-4">
+<a href="#" className="hover:text-white transition-colors no-underline">Privacy Policy</a>
+<a href="#" className="hover:text-white transition-colors no-underline">Terms of Service</a>
+<a href="#" className="hover:text-white transition-colors no-underline">Cookie Policy</a>
+</div>
+</div>
+</div>
+</footer>
+);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  APP
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+function App() {
+useScrollReveal();
+
+return (
+<div className="min-h-screen bg-white">
+<AnnouncementBar />
+<Navigation />
+<Hero />
+<Trust />
+<DashboardPreview />
+<Problem />
+<Services />
+<LiveDemos />
+<HowItWorks />
+<BeforeAfter />
+<WhyResearchPilot />
+<About />
+<Principles />
+<ClientLogos />
+<Testimonials />
+<CaseStudy />
+<FAQ />
+<FAQChatbot />
+<FinalCTA />
+<Footer />
+</div>
+);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  RENDER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+
+</body>
+</html>
