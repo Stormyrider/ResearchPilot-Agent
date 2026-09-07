@@ -1,5 +1,5 @@
 import streamlit as st
-from agent import agent, thread_id, user_id, init_db, save_to_db
+from agent import get_agent, init_db, save_to_db
 from agent import Context
 
 # Initialize database (if not already)
@@ -12,6 +12,17 @@ st.caption("Your AI research assistant – search private knowledge, the web, an
 # Session state for messages
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
+# Load the agent lazily and cache it
+@st.cache_resource
+def load_agent():
+    return get_agent()
+
+agent = load_agent()
+
+# Fixed thread & user IDs (you can make them dynamic if needed)
+THREAD_ID = "streamlit-session-1"
+USER_ID = "streamlit-user-1"
 
 # Display chat history
 for msg in st.session_state.messages:
@@ -37,10 +48,10 @@ if prompt := st.chat_input("Ask a research question..."):
                     },
                     {
                         "configurable": {
-                            "thread_id": thread_id
+                            "thread_id": THREAD_ID
                         }
                     },
-                    context=Context(user_id)
+                    context=Context(USER_ID)
                 )
 
                 final_message = result["messages"][-1]
@@ -58,8 +69,8 @@ if prompt := st.chat_input("Ask a research question..."):
                 st.markdown(answer)
                 st.session_state.messages.append({"role": "assistant", "content": answer})
 
-                # Save to database
-                save_to_db(user_id, thread_id, prompt, answer)
+                # Save to database (logs)
+                save_to_db(USER_ID, THREAD_ID, prompt, answer)
 
             except Exception as e:
                 st.error(f"Agent error: {type(e).__name__} – {e}")
