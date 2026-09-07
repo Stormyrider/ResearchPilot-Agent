@@ -1,13 +1,11 @@
 import os
-import uuid
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # Import your agent and related objects
-from agent import agent, init_db, save_to_db
+from agent import get_agent, init_db, save_to_db
 from agent import Context
 
 # Initialize the database (if not already)
@@ -15,7 +13,7 @@ init_db()
 
 app = FastAPI()
 
-# Allow frontend to call this API (if served from different origin, but we serve from same)
+# Allow frontend to call this API (served from same domain, but we keep CORS open)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -24,7 +22,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# We'll use a fixed thread_id and user_id for the demo; you can make them session-based later.
+# We'll use a fixed thread_id and user_id for the demo;
+# you can make them session-based later.
 THREAD_ID = "web-session-1"
 USER_ID = "web-user-1"
 
@@ -37,6 +36,7 @@ class ChatResponse(BaseModel):
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
+        agent = get_agent()  # lazy load – cached after first call
         result = agent.invoke(
             {
                 "messages": [{"role": "user", "content": request.question}]
@@ -54,7 +54,7 @@ async def chat(request: ChatRequest):
         else:
             answer = final_message.content
 
-        # Save to database (optional)
+        # Save to database (logs)
         save_to_db(USER_ID, THREAD_ID, request.question, answer)
 
         return ChatResponse(answer=answer)
@@ -65,8 +65,10 @@ async def chat(request: ChatRequest):
 # Serve the HTML page (index.html) at the root
 @app.get("/")
 async def get_index():
-    # Ensure your HTML file is named index.html and is in the same directory as server.py
+    # Vercel will serve the file from the current working directory
     return FileResponse("index.html")
 
-# If you have other static files (like images, CSS), serve them too
-# app.mount("/static", StaticFiles(directory="static"), name="static")
+# Optional health check for Vercel
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
